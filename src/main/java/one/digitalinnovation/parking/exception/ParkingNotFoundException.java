@@ -8,6 +8,6 @@ public class ParkingNotFoundException extends RuntimeException {
 
 
     public ParkingNotFoundException(String id) {
-       super("Parking not foud with Id: " + id);
+       super("Parking not found with Id: " + id);
     }
 }
