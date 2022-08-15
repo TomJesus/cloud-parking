@@ -11,7 +11,9 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @EnableSwagger2
@@ -25,7 +27,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("one.digitalinnovation.parking"))
                 .build()
                 .apiInfo(metaData())
-                .securityContexts(Arrays.asList(getSecurityContext()))
+                .securityContexts(Arrays.asList(actuatorSecurityContext()))
                 .securitySchemes(Arrays.asList(basicAuthScheme()));
 
     }
@@ -34,7 +36,7 @@ public class SwaggerConfig {
         return new BasicAuth("basicAuth");
     }
 
-    private SecurityContext getSecurityContext() {
+    private SecurityContext actuatorSecurityContext() {
         return SecurityContext.builder()
                 .securityReferences(Arrays.asList(basicAuthReference()))
                 .build();
@@ -42,6 +44,15 @@ public class SwaggerConfig {
 
     private SecurityReference basicAuthReference() {
         return new SecurityReference("basicAuth", new AuthorizationScope[0]);
+    }
+    private List<SecurityScheme> basicScheme() {
+        List<SecurityScheme> schemeList = new ArrayList<>();
+        schemeList.add(new BasicAuth("basicAuth"));
+        return schemeList;
+    }
+
+    private ApiKey apiKey() {
+        return new ApiKey("apiKey", "Authorization", "header");
     }
 
     private ApiInfo metaData() {
